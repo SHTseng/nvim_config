@@ -1,25 +1,6 @@
-local Plug = vim.fn['plug#']
-local package_path = vim.fn.stdpath('data')..'/plugged'
-vim.call('plug#begin', package_path)
-Plug 'nvim-lualine/lualine.nvim'
-Plug 'morhetz/gruvbox'
--- Plug 'neovim/nvim-lspconfig'
--- Plug 'glepnir/lspsaga.nvim'
--- Plug 'kyazdani42/nvim-web-devicons'
--- Plug 'nvim-lua/completion-nvim'
-
--- file search
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
-
--- Highlighter
-Plug ('nvim-treesitter/nvim-treesitter', {['do'] = vim.fn['TSUpdate']})
-vim.call('plug#end')
-
 require('lualine').setup {
     options = {
+        icons_enabled = true,
         theme = 'auto',
         icons_enabled = false,
         component_separators = { left = '', right = ''},
@@ -58,7 +39,3 @@ require('lualine').setup {
     inactive_winbar = {},
     extensions = {}
 }
-
-vim.cmd([[
-
-]])

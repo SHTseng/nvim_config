@@ -22,6 +22,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 -- Plug 'nvim-telescope/telescope.nvim'
 -- Highlighter
 Plug ('nvim-treesitter/nvim-treesitter', {['do'] = vim.fn['TSUpdate']})
+Plug 'lukas-reineke/indent-blankline.nvim'
 vim.call('plug#end')
 
 local disabled_built_ins = {
@@ -49,6 +50,11 @@ for _, plugin in pairs(disabled_built_ins) do
 end
 
 require("scrollbar").setup()
+require("indent_blankline").setup {
+    -- for example, context is off by default, use this to turn it on
+    show_current_context = true,
+    show_current_context_start = true,
+}
 
 require('plugin.coc')
 require('plugin.fzf')

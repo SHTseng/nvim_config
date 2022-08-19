@@ -48,7 +48,7 @@ set nowritebackup
 set viminfo='20,\"500   " remember copy registers after quitting in the .viminfo file -- 20 jump links, regs up to 500 lines'
 set hidden              " remember undo after quitting
 set history=50          " keep 50 lines of command history
-set mouse=v             " use mouse in visual mode (not normal,insert,command,help mode
+set mouse=a             " use mouse in visual mode (not normal,insert,command,help mode
 " set t_ut=
 set previewheight=7
 

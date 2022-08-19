@@ -23,6 +23,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 -- Highlighter
 Plug ('nvim-treesitter/nvim-treesitter', {['do'] = vim.fn['TSUpdate']})
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'jiangmiao/auto-pairs'
 vim.call('plug#end')
 
 local disabled_built_ins = {

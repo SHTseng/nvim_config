@@ -25,6 +25,9 @@ nmap <leader>num :set nu! <CR>:set rnu!<CR>
 nmap \q :nohlsearch<CR>
 nnoremap <leader><space> :noh<cr>
 
+nnoremap <C-Left> :tabprevious<CR>
+nnoremap <C-Right> :tabnext<CR>
+
 set textwidth=0
 set wrapmargin=0  "Disable line wrap
 set ruler   "Show row and column ruler information

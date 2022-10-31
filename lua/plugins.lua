@@ -2,7 +2,7 @@ local Plug = vim.fn['plug#']
 local package_path = vim.fn.stdpath('data')..'/plugged'
 vim.call('plug#begin', package_path)
 Plug ('neoclide/coc.nvim', {branch = 'release'})
--- Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'scrooloose/nerdtree'
 Plug 'petertriho/nvim-scrollbar'
 -- File search tool
@@ -57,6 +57,7 @@ require("indent_blankline").setup {
     show_current_context_start = true,
 }
 
+require('plugin.cpp_highlight')
 require('plugin.coc')
 require('plugin.fzf')
 require('plugin.lualine')

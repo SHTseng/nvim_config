@@ -1,8 +1,20 @@
--- vim.cmd("autocmd!")
+--system
 vim.opt.scrolloff = 5
 vim.opt.swapfile = false
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+vim.opt.termguicolors = true
+vim.opt.timeoutlen = 300
+vim.opt.updatetime = 250
+vim.opt.lazyredraw = true --Redraw only when we need to.
+vim.opt.confirm = true --get a dialog when :q, :w, or :wq fails
+vim.opt.backup = false --no backup~ files.
+vim.opt.writebackup = false
+vim.opt.hidden = true --remember undo after quitting
+vim.opt.history = 50 --keep 50 lines of command history
+vim.opt.mouse = 'a' --use mouse in visual mode (not normal,insert,command,help mode
+vim.opt.previewheight = 7
+vim.opt.relativenumber = true
 
 --indent
 vim.opt.autoindent = true

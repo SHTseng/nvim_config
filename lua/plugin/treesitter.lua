@@ -1,4 +1,4 @@
-require'nvim-treesitter.configs'.setup{
+require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true,
     },
@@ -16,4 +16,6 @@ require'nvim-treesitter.configs'.setup{
     autotag = {
         enable = true,
     },
+    auto_install = true,
+    sync_isntall = false,
 }

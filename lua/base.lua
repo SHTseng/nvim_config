@@ -15,6 +15,7 @@ vim.opt.history = 50 --keep 50 lines of command history
 vim.opt.mouse = 'a' --use mouse in visual mode (not normal,insert,command,help mode
 vim.opt.previewheight = 7
 vim.opt.relativenumber = true
+vim.opt.autochdir = true
 
 --indent
 vim.opt.autoindent = true

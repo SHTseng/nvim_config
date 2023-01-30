@@ -3,14 +3,14 @@ local require = util.require
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " " -- make sure to set `mapleader` before lazy so your mappings are correct
@@ -45,9 +45,9 @@ require("lazy").setup({
         cmd = 'Neotree',
         branch = 'v2.x',
         dependencies = {
-          'nvim-lua/plenary.nvim',
-          'kyazdani42/nvim-web-devicons',
-          'MunifTanjim/nui.nvim'
+            'nvim-lua/plenary.nvim',
+            'kyazdani42/nvim-web-devicons',
+            'MunifTanjim/nui.nvim'
         },
         config = function() require('config.neotree') end
     },
@@ -59,25 +59,25 @@ require("lazy").setup({
         config = function() require('config.treesitter') end
     },
     {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-    dependencies = {
-        { 'hrsh7th/cmp-buffer' },
-        { 'hrsh7th/cmp-nvim-lsp' },
-        { 'hrsh7th/cmp-path' },
-        { 'hrsh7th/cmp-nvim-lsp-signature-help' },
-        { 'saadparwaiz1/cmp_luasnip' }
-    },
-    config = function() require('config.cmp') end
+        'hrsh7th/nvim-cmp',
+        event = 'InsertEnter',
+        dependencies = {
+            { 'hrsh7th/cmp-buffer' },
+            { 'hrsh7th/cmp-nvim-lsp' },
+            { 'hrsh7th/cmp-path' },
+            { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+            { 'saadparwaiz1/cmp_luasnip' }
+        },
+        config = function() require('config.cmp') end
     },
     {
         'williamboman/mason.nvim',
         cmd = {
-          'Mason',
-          'MasonInstall',
-          'MasonUninstall',
-          'MasonUninstallAll',
-          'MasonLog'
+            'Mason',
+            'MasonInstall',
+            'MasonUninstall',
+            'MasonUninstallAll',
+            'MasonLog'
         },
         config = function() require('config.mason') end,
     },
@@ -90,11 +90,11 @@ require("lazy").setup({
         'neovim/nvim-lspconfig',
         event = "BufReadPre",
         dependencies = {
-          'hrsh7th/cmp-nvim-lsp',
-          'williamboman/mason-lspconfig.nvim'
+            'hrsh7th/cmp-nvim-lsp',
+            'williamboman/mason-lspconfig.nvim'
         },
         config = function() require('config.lsp') end,
-      },
+    },
     { 'folke/which-key.nvim' },
     {
         'neovim/nvim-lspconfig',
@@ -145,10 +145,8 @@ require('base')
 require('keymap')
 
 -- colorscheme gruvbox
-vim.cmd[[colorscheme tokyonight-storm]]
-vim.cmd[[
+vim.cmd [[colorscheme tokyonight-storm]]
+vim.cmd [[
     nnoremap <C-Left> :tabprevious<CR>
     nnoremap <C-Right> :tabnext<CR>
-
-    nnoremap <silent><nowait> <space>d :call CocAction('jumpDefinition', v:false)<CR>
 ]]

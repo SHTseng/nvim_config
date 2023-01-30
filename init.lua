@@ -71,6 +71,21 @@ require("lazy").setup({
         config = function() require('config.cmp') end
     },
     {
+        'L3MON4D3/LuaSnip',
+        dependencies = {
+            'rafamadriz/friendly-snippets'
+        },
+        config = function() require('config.luasnip') end
+    },
+    {
+        'folke/trouble.nvim',
+        cmd = { 'TroubleToggle', 'Trouble' },
+        opts = {
+            auto_open = false,
+            use_diagnostic_signs = true,
+        },
+    },
+    {
         'williamboman/mason.nvim',
         cmd = {
             'Mason',

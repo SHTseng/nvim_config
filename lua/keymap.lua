@@ -2,7 +2,7 @@ local keymap = vim.api.nvim_set_keymap
 local default_opts = { noremap = true, silent = true }
 
 keymap('i', 'jj', "<ESC>", default_opts)
-keymap('n', '<leader><space>', ":noh<CR>", default_opts)
+-- keymap('n', '<leader><space>', ":noh<CR>", default_opts)
 
 local wk = require("which-key")
 wk.setup({
@@ -60,4 +60,3 @@ local leader = {
 
 wk.register(leader, { prefix = "<leader>" })
 -- wk.register({ g = { name = "+goto" } })
-

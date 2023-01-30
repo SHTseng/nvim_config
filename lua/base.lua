@@ -15,7 +15,6 @@ vim.opt.history = 50 --keep 50 lines of command history
 vim.opt.mouse = 'a' --use mouse in visual mode (not normal,insert,command,help mode
 vim.opt.previewheight = 7
 vim.opt.relativenumber = true
-vim.opt.autochdir = true
 
 --indent
 vim.opt.autoindent = true
@@ -33,7 +32,7 @@ vim.opt.incsearch = true
 
 ---word wrap
 vim.opt.textwidth = 80
-vim.opt.wrapmargin = 120  --Enable line wrap
+vim.opt.wrapmargin = 120 --Enable line wrap
 vim.opt.wrap = true
 vim.opt.linebreak = true --Break lines at word (requires Wrap lines)
 vim.opt.ruler = true --Show row and column ruler information
@@ -46,7 +45,7 @@ vim.opt.title = true --Show file in titlebar
 vim.opt.showmode = true --Show mode in status bar (insert/replace/...)
 vim.opt.cursorline = true --Show current cursor line
 
-vim.opt.virtualedit = 'onemore'  --Allow to go one character behind the end of the line
+vim.opt.virtualedit = 'onemore' --Allow to go one character behind the end of the line
 vim.opt.wildmenu = true --visual autocomplete for command menu
 vim.opt.wildignore = '*.o,*.obj,*.bak,*.exe,*.py[co],*.swp,*~,*.pyc,.svn,*/cm/log/**,tags,*.jpg,*.png,*.jpeg,*.png,*.mesh,build*/**,build/**,*.sublime-workspace,*.svg,build2/**,build3/**'
 

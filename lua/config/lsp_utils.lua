@@ -1,106 +1,55 @@
 local wk = require("which-key")
-local util = require("utils")
 
 local M = {}
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-M.capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-
-local lsp_formatting = function(bufnr)
-  vim.lsp.buf.format({
-    filter = function(c)
-      return c.name ~= "tsserver"
-    end,
-    bufnr = bufnr,
-  })
+local ok_blink, blink = pcall(require, "blink.cmp")
+if ok_blink then
+  M.capabilities = blink.get_lsp_capabilities()
+else
+  M.capabilities = vim.lsp.protocol.make_client_capabilities()
 end
-
-local cmd = vim.api.nvim_command
 
 function M.on_attach(client, bufnr)
-  local function buf_set_option(...)
-    vim.api.nvim_buf_set_option(bufnr, ...)
-  end
-
-  local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-
   M.set_keys(client, bufnr)
+  vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-  buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
-
-  if client.supports_method("textDocument/formatting") then
-    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+  if client.name == "eslint" then
     vim.api.nvim_create_autocmd("BufWritePre", {
-      group = augroup,
       buffer = bufnr,
-      callback = function()
-        lsp_formatting(bufnr)
-      end,
+      pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },
+      command = "EslintFixAll",
     })
-  end
-
-  if (client.name == "eslint") then
-    cmd('autocmd BufWritePre *.tsx,*.ts,*.jsx,*.js EslintFixAll')
   end
 end
 
-M.autoformat = true
-
-function M.format()
-  if M.autoformat then
-    if vim.lsp.buf.format then
-      vim.lsp.buf.format()
-    else
-      vim.lsp.buf.formatting_sync()
-    end
+local function format_buf()
+  local ok, conform = pcall(require, "conform")
+  if ok then
+    conform.format({ lsp_format = "fallback", timeout_ms = 1000 })
+  else
+    vim.lsp.buf.format({ timeout_ms = 1000 })
   end
 end
 
 function M.set_keys(client, buffer)
-  local cap = client.server_capabilities
-
-  local keymap = {
-    buffer = buffer,
-    ["<leader>"] = {
-      c = {
-        name = "+code",
-        r = { "<CMD>Lspsaga rename<CR>", "Rename" },
-        a = {
-          { "<CMD>Lspsaga code_action<CR>", "Code Action" },
-          { "<CMD>Lspsaga code_action<CR>", "Code Action", mode = "v" },
-        },
-        f = {
-          {
-            M.format,
-            "Format Document",
-            cond = cap.documentFormatting,
-          },
-          {
-            M.format,
-            "Format Range",
-            cond = cap.documentRangeFormatting,
-            mode = "v",
-          },
-        },
-        d = { "<CMD>Lspsaga show_line_diagnostics<CR>", "Line Diagnostics" },
-        g = {
-          name = "+goto",
-          d = { "<CMD>Telescope lsp_definitions<CR>", "Goto Definition" },
-          r = { "<CMD>Lspsaga lsp_finder<CR>", "References" },
-          R = { "<CMD>Trouble lsp_references<CR>", "Trouble References" },
-          D = { "<CMD>Telescope lsp_declarations<CR>", "Goto Declaration" },
-          I = { "<CMD>Telescope lsp_implementations<CR>", "Goto Implementation" },
-          t = { "<CMD>Telescope lsp_type_definitions<CR>", "Goto Type Definition" },
-        },
-      },
-    },
-    ["<C-k>"] = { "<CMD>lua vim.lsp.buf.signature_help()<CR>", "Signature Help", mode = { "n", "i" } },
-    ["K"] = { "<CMD>lua vim.lsp.buf.hover()<CR>", "Hover" },
-    ["[d"] = { "<CMD>lua vim.diagnostic.goto_prev()<CR>", "Next Diagnostic" },
-    ["]d"] = { "<CMD>lua vim.diagnostic.goto_next()<CR>", "Prev Diagnostic" },
-  }
-
-  wk.register(keymap)
+  wk.add({
+    { "<leader>c", group = "code", buffer = buffer },
+    { "<leader>cr", vim.lsp.buf.rename, desc = "Rename", buffer = buffer },
+    { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", buffer = buffer, mode = { "n", "v" } },
+    { "<leader>cf", format_buf, desc = "Format", buffer = buffer, mode = { "n", "v" } },
+    { "<leader>cd", vim.diagnostic.open_float, desc = "Line Diagnostics", buffer = buffer },
+    { "<leader>cg", group = "goto", buffer = buffer },
+    { "<leader>cgd", "<CMD>Telescope lsp_definitions<CR>", desc = "Goto Definition", buffer = buffer },
+    { "<leader>cgr", "<CMD>Telescope lsp_references<CR>", desc = "References", buffer = buffer },
+    { "<leader>cgR", "<CMD>Trouble lsp_references<CR>", desc = "Trouble References", buffer = buffer },
+    { "<leader>cgD", "<CMD>Telescope lsp_declarations<CR>", desc = "Goto Declaration", buffer = buffer },
+    { "<leader>cgI", "<CMD>Telescope lsp_implementations<CR>", desc = "Goto Implementation", buffer = buffer },
+    { "<leader>cgt", "<CMD>Telescope lsp_type_definitions<CR>", desc = "Goto Type Definition", buffer = buffer },
+    { "<C-k>", vim.lsp.buf.signature_help, desc = "Signature Help", buffer = buffer, mode = { "n", "i" } },
+    { "K", vim.lsp.buf.hover, desc = "Hover", buffer = buffer },
+    { "[d", function() vim.diagnostic.jump({ count = -1 }) end, desc = "Prev Diagnostic", buffer = buffer },
+    { "]d", function() vim.diagnostic.jump({ count = 1 }) end, desc = "Next Diagnostic", buffer = buffer },
+  })
 end
 
 return M

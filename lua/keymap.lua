@@ -1,62 +1,48 @@
 local keymap = vim.api.nvim_set_keymap
 local default_opts = { noremap = true, silent = true }
 
+keymap('n', '<C-[>', ":tabprevious<CR>", default_opts)
+keymap('n', '<C-]>', ":tabnext<CR>", default_opts)
 keymap('i', 'jj', "<ESC>", default_opts)
--- keymap('n', '<leader><space>', ":noh<CR>", default_opts)
 
 local wk = require("which-key")
 wk.setup({
-    show_help = false,
-    triggers = "auto",
     plugins = { spelling = true },
-    key_labels = { ["<leader>"] = "SPC" },
+    replace = {
+        ["<leader>"] = "SPC",
+    },
 })
 
-local leader = {
-    f = {
-        name = "+file",
-        f = { "<CMD>Telescope find_files<CR>", "Find File" },
-        r = { "<CMD>Telescope oldfiles<CR>", "Open Recent File" },
-        n = { "<CMD>enew<CR>", "New File" },
-    },
-    n = {
-        name = "+filetree",
-        n = { "<CMD>Neotree toggle<CR>", "File Explorer" },
-        r = { "<CMD>Neotree reveal<CR>", "Reveal" }
-    },
-    l = {
-        name = "+lsp",
-        i = { "<CMD>Mason<CR>", "Manage Servers" },
-        l = { "<CMD>MasonLog<CR>", "See logs" }
-    },
-    s = {
-        name = "+search",
-        g = { "<CMD>Telescope live_grep<CR>", "Grep" },
-        b = { "<CMD>Telescope current_buffer_fuzzy_find<CR>", "Buffer" },
-        s = {
-            function()
-                require("telescope.builtin").lsp_document_symbols({
-                    symbols = {
-                        "Class",
-                        "Function",
-                        "Method",
-                        "Constructor",
-                        "Interface",
-                        "Module",
-                        "Struct",
-                        "Trait",
-                        "Field",
-                        "Property",
-                    },
-                })
-            end,
-            "Goto Symbol",
-        },
-        h = { "<CMD>Telescope command_history<CR>", "Command History" },
-        m = { "<CMD>Telescope marks<CR>", "Jump to Mark" },
-        r = { "<CMD>lua require('spectre').open()<CR>", "Replace (Spectre)" },
-    },
-}
+wk.add({
+    { "<leader>f", group = "file" },
+    { "<leader>ff", "<CMD>Telescope find_files<CR>", desc = "Find File" },
+    { "<leader>fr", "<CMD>Telescope oldfiles<CR>", desc = "Open Recent File" },
+    { "<leader>fn", "<CMD>enew<CR>", desc = "New File" },
 
-wk.register(leader, { prefix = "<leader>" })
--- wk.register({ g = { name = "+goto" } })
+    { "<leader>n", group = "filetree" },
+    { "<leader>nn", "<CMD>Neotree toggle<CR>", desc = "File Explorer" },
+    { "<leader>nr", "<CMD>Neotree reveal<CR>", desc = "Reveal" },
+
+    { "<leader>l", group = "lsp" },
+    { "<leader>li", "<CMD>Mason<CR>", desc = "Manage Servers" },
+    { "<leader>ll", "<CMD>MasonLog<CR>", desc = "See logs" },
+
+    { "<leader>s", group = "search" },
+    { "<leader>sg", "<CMD>Telescope live_grep<CR>", desc = "Grep" },
+    { "<leader>sb", "<CMD>Telescope current_buffer_fuzzy_find<CR>", desc = "Buffer" },
+    {
+        "<leader>ss",
+        function()
+            require("telescope.builtin").lsp_document_symbols({
+                symbols = {
+                    "Class", "Function", "Method", "Constructor", "Interface",
+                    "Module", "Struct", "Trait", "Field", "Property",
+                },
+            })
+        end,
+        desc = "Goto Symbol",
+    },
+    { "<leader>sh", "<CMD>Telescope command_history<CR>", desc = "Command History" },
+    { "<leader>sm", "<CMD>Telescope marks<CR>", desc = "Jump to Mark" },
+    { "<leader>sr", "<CMD>lua require('spectre').open()<CR>", desc = "Replace (Spectre)" },
+})

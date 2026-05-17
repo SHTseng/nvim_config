@@ -3,18 +3,17 @@ if not neoscroll then
   return
 end
 
-neoscroll.setup({
-  mappings = { "<C-u>", "<C-d>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
-})
+neoscroll.setup()
 
-local map = {}
-
-map["<C-u>"] = { "scroll", { "-vim.wo.scroll", "true", "80" } }
-map["<C-d>"] = { "scroll", { "vim.wo.scroll", "true", "80" } }
-map["<C-y>"] = { "scroll", { "-0.10", "false", "80" } }
-map["<C-e>"] = { "scroll", { "0.10", "false", "80" } }
-map["zt"] = { "zt", { "150" } }
-map["zz"] = { "zz", { "150" } }
-map["zb"] = { "zb", { "150" } }
-
-require("neoscroll.config").set_mappings(map)
+local keymap = {
+  ["<C-u>"] = function() neoscroll.ctrl_u({ duration = 80 }) end,
+  ["<C-d>"] = function() neoscroll.ctrl_d({ duration = 80 }) end,
+  ["<C-y>"] = function() neoscroll.scroll(-0.1, { move_cursor = false, duration = 80 }) end,
+  ["<C-e>"] = function() neoscroll.scroll(0.1, { move_cursor = false, duration = 80 }) end,
+  ["zt"]    = function() neoscroll.zt({ half_win_duration = 150 }) end,
+  ["zz"]    = function() neoscroll.zz({ half_win_duration = 150 }) end,
+  ["zb"]    = function() neoscroll.zb({ half_win_duration = 150 }) end,
+}
+for key, fn in pairs(keymap) do
+  vim.keymap.set({ "n", "v", "x" }, key, fn, { silent = true, desc = "Neoscroll " .. key })
+end

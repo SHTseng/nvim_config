@@ -16,59 +16,87 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " " -- make sure to set `mapleader` before lazy so your mappings are correct
 
 require("lazy").setup({
+    -- Detect tabstop and shiftwidth automatically
+    'tpope/vim-sleuth',
+    -- "gc" to comment visual regions/lines
+    { 'numToStr/Comment.nvim', opts = {} },
     'morhetz/gruvbox',
+    {
+        'rebelot/kanagawa.nvim',
+        lazy = false,
+        config = true
+    },
     'folke/tokyonight.nvim',
     {
-        'kyazdani42/nvim-web-devicons',
+        'nvim-tree/nvim-web-devicons',
         event = 'BufRead'
     },
     {
         'nvim-lualine/lualine.nvim',
         event = 'VeryLazy',
-        dependencies = { 'kyazdani42/nvim-web-devicons' }
+        dependencies = { 'nvim-tree/nvim-web-devicons' }
     },
     'lukas-reineke/indent-blankline.nvim',
     'tpope/vim-sleuth',
     {
         'nvim-telescope/telescope.nvim',
-        dependencies = { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
-        cmd = 'Telescope',
-        config = function() require('config.telescope') end
-    },
-    {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-        cond = vim.fn.executable 'make' == 1
+        event = 'VeryLazy',
+        branch = '0.1.x',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            {
+                'nvim-telescope/telescope-fzf-native.nvim',
+                build = 'make',
+                cond = vim.fn.executable 'make' == 1
+            },
+            { 'nvim-telescope/telescope-ui-select.nvim' },
+        },
+        config = function()
+            require('config.telescope')
+            -- Enable telescope extensions, if they are installed
+            --	    pcall(require('config.telescope').load_extension, 'fzf')
+            --	    pcall(require('config.telescope').load_extension, 'ui-select')
+        end,
     },
     {
         'nvim-neo-tree/neo-tree.nvim',
-        cmd = 'Neotree',
-        branch = 'v2.x',
+        -- cmd = 'Neotree',
+        branch = 'v3.x',
         dependencies = {
             'nvim-lua/plenary.nvim',
-            'kyazdani42/nvim-web-devicons',
+            'nvim-tree/nvim-web-devicons',
             'MunifTanjim/nui.nvim'
         },
         config = function() require('config.neotree') end
     },
     {
         'nvim-treesitter/nvim-treesitter',
+        branch = 'main',
+        lazy = false,
         build = ':TSUpdate',
-        event = 'BufReadPost',
-        cmd = 'TSUpdate',
         config = function() require('config.treesitter') end
     },
     {
-        'hrsh7th/nvim-cmp',
+        'saghen/blink.cmp',
         event = 'InsertEnter',
+        version = '1.*',
         dependencies = {
-            { 'hrsh7th/cmp-buffer' },
-            { 'hrsh7th/cmp-nvim-lsp' },
-            { 'hrsh7th/cmp-path' },
-            { 'hrsh7th/cmp-nvim-lsp-signature-help' },
-            { 'saadparwaiz1/cmp_luasnip' }
+            'rafamadriz/friendly-snippets',
+            'L3MON4D3/LuaSnip',
         },
-        config = function() require('config.cmp') end
+        opts = {
+            keymap = { preset = 'default' },
+            snippets = { preset = 'luasnip' },
+            sources = {
+                default = { 'lsp', 'path', 'snippets', 'buffer' },
+            },
+            completion = {
+                documentation = { auto_show = true, auto_show_delay_ms = 200 },
+                list = { selection = { preselect = false, auto_insert = false } },
+            },
+            signature = { enabled = true },
+            appearance = { nerd_font_variant = 'mono' },
+        },
     },
     {
         'L3MON4D3/LuaSnip',
@@ -97,46 +125,37 @@ require("lazy").setup({
         config = function() require('config.mason') end,
     },
     {
-        'glepnir/lspsaga.nvim',
-        cmd = { 'Lspsaga' },
-        config = function() require('config.lspsaga') end,
+        'stevearc/conform.nvim',
+        event = { 'BufWritePre' },
+        cmd = { 'ConformInfo' },
+        config = function() require('config.conform') end,
     },
     {
         'neovim/nvim-lspconfig',
         event = "BufReadPre",
         dependencies = {
-            'hrsh7th/cmp-nvim-lsp',
-            'williamboman/mason-lspconfig.nvim'
+            'williamboman/mason.nvim',
+            'williamboman/mason-lspconfig.nvim',
+            'WhoIsSethDaniel/mason-tool-installer.nvim',
+            'saghen/blink.cmp',
+            { 'j-hui/fidget.nvim', opts = {} },
         },
         config = function() require('config.lsp') end,
     },
     { 'folke/which-key.nvim' },
-    {
-        'neovim/nvim-lspconfig',
-        event = "BufReadPre",
-        dependencies = {
-            'hrsh7th/cmp-nvim-lsp',
-            'williamboman/mason-lspconfig.nvim'
-        },
-        config = function() require('config.lsp') end,
-    },
     {
         'karb94/neoscroll.nvim',
         keys = { '<C-u>', '<C-d>', 'gg', 'G' },
         config = function() require('config.neoscroll') end
     },
     {
-        'steelsojka/pears.nvim',
+        'windwp/nvim-autopairs',
         event = 'InsertEnter',
-        config = function() require("pears").setup() end
+        opts = {},
     }
 })
 
 local disabled_built_ins = {
-    "netrw",
-    "netrwPlugin",
-    "netrwSettings",
-    "netrwFileHandlers",
     "gzip",
     "zip",
     "zipPlugin",
@@ -149,7 +168,8 @@ local disabled_built_ins = {
     "2html_plugin",
     "logipat",
     "rrhelper",
-    "spellfile_plugin"
+    "spellfile_plugin",
+    "netrwPlugin"
 }
 
 for _, plugin in pairs(disabled_built_ins) do
@@ -160,8 +180,6 @@ require('base')
 require('keymap')
 
 -- colorscheme gruvbox
-vim.cmd [[colorscheme tokyonight-storm]]
-vim.cmd [[
-    nnoremap <C-Left> :tabprevious<CR>
-    nnoremap <C-Right> :tabnext<CR>
-]]
+-- vim.cmd [[colorscheme gruvbox]]
+-- vim.cmd [[colorscheme tokyonight-storm]]
+vim.cmd [[colorscheme kanagawa]]

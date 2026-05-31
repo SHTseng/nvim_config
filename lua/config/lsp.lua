@@ -70,3 +70,21 @@ vim.diagnostic.config({
     prefix = "",
   },
 })
+
+local diagnostic_hover_group = vim.api.nvim_create_augroup("DiagnosticHover", { clear = true })
+vim.api.nvim_create_autocmd("CursorHold", {
+  group = diagnostic_hover_group,
+  callback = function()
+    vim.diagnostic.open_float(nil, {
+      focus = false,
+      scope = "cursor",
+      close_events = {
+        "BufLeave",
+        "CursorMoved",
+        "CursorMovedI",
+        "InsertEnter",
+        "FocusLost",
+      },
+    })
+  end,
+})
